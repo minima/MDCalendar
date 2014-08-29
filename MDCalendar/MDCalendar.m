@@ -62,7 +62,7 @@ static NSString * const kMDCalendarViewCellIdentifier = @"kMDCalendarViewCellIde
         UIView *bottomBorderView = [[UIView alloc] initWithFrame:CGRectZero];
         bottomBorderView.hidden = YES;
         self.borderView = bottomBorderView;
-
+        
         UIView *indicatorView = [[UIView alloc] initWithFrame:CGRectZero];
         indicatorView.hidden = YES;
         self.indicatorView = indicatorView;
@@ -196,7 +196,7 @@ NSString * MDCalendarDayStringFromDate(NSDate *date) {
         NSMutableArray *dayLabels = [NSMutableArray new];
         for (NSString *day in weekdays) {
             UILabel *dayLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-            dayLabel.text = day;
+            dayLabel.text = day.uppercaseString;
             dayLabel.font = self.font;
             dayLabel.textAlignment = NSTextAlignmentCenter;
             dayLabel.adjustsFontSizeToFitWidth = YES;
@@ -449,6 +449,14 @@ static CGFloat const kMDCalendarViewSectionSpacing = 10.f;
         self.canSelectDaysBeforeStartDate = YES;
         
         [self addSubview:_collectionView];
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self commonInit];
     }
     return self;
 }
