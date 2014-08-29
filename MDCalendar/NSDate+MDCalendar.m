@@ -43,56 +43,33 @@
     return MDCalendarDateFromComponents(components);
 }
 
++ (NSDateFormatter *)dateFormatter {
+    static NSDateFormatter *dateFormatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        dateFormatter = [[NSDateFormatter alloc] init];
+        
+        NSString *localization = [NSBundle mainBundle].preferredLocalizations.firstObject;
+        dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:localization];
+    });
+    
+    return dateFormatter;
+}
+
 + (NSArray *)weekdays {
-    return @[@"Sunday",
-             @"Monday",
-             @"Tuesday",
-             @"Wednesday",
-             @"Thursday",
-             @"Friday",
-             @"Saturday"];
+    return [self dateFormatter].standaloneWeekdaySymbols;
 }
 
 + (NSArray *)weekdayAbbreviations {
-    return @[@"SUN",
-             @"MON",
-             @"TUE",
-             @"WED",
-             @"THU",
-             @"FRI",
-             @"SAT"];
+    return [self dateFormatter].shortStandaloneWeekdaySymbols;
 }
 
 + (NSArray *)monthNames {
-    return @[@"Zero",
-             @"January",
-             @"February",
-             @"March",
-             @"April",
-             @"May",
-             @"June",
-             @"July",
-             @"August",
-             @"September",
-             @"October",
-             @"November",
-             @"December"];
+    return [self dateFormatter].standaloneMonthSymbols;
 }
 
 + (NSArray *)shortMonthNames {
-    return @[@"Zero",
-             @"Jan",
-             @"Feb",
-             @"Mar",
-             @"Apr",
-             @"May",
-             @"Jun",
-             @"Jul",
-             @"Aug",
-             @"Sep",
-             @"Oct",
-             @"Nov",
-             @"Dec"];
+    return [self dateFormatter].shortStandaloneMonthSymbols;
 }
 
 - (NSDate *)firstDayOfMonth {
@@ -135,11 +112,11 @@
 }
 
 - (NSString *)monthString {
-    return [NSDate monthNames][[self month]];
+    return [NSDate monthNames][[self month] - 1];
 }
 
 - (NSString *)shortMonthString {
-    return [NSDate shortMonthNames][[self month]];
+    return [NSDate shortMonthNames][[self month] - 1];
 }
 
 - (NSInteger)year {

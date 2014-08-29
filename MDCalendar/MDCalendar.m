@@ -62,7 +62,7 @@ static NSString * const kMDCalendarViewCellIdentifier = @"kMDCalendarViewCellIde
         UIView *bottomBorderView = [[UIView alloc] initWithFrame:CGRectZero];
         bottomBorderView.hidden = YES;
         self.borderView = bottomBorderView;
-
+        
         UIView *indicatorView = [[UIView alloc] initWithFrame:CGRectZero];
         indicatorView.hidden = YES;
         self.indicatorView = indicatorView;
@@ -196,7 +196,7 @@ NSString * MDCalendarDayStringFromDate(NSDate *date) {
         NSMutableArray *dayLabels = [NSMutableArray new];
         for (NSString *day in weekdays) {
             UILabel *dayLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-            dayLabel.text = day;
+            dayLabel.text = day.uppercaseString;
             dayLabel.font = self.font;
             dayLabel.textAlignment = NSTextAlignmentCenter;
             dayLabel.adjustsFontSizeToFitWidth = YES;
@@ -409,44 +409,44 @@ static CGFloat const kMDCalendarViewSectionSpacing = 10.f;
 @implementation MDCalendar
 
 - (void)commonInit {
-  UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-  layout.minimumInteritemSpacing  = kMDCalendarViewItemSpacing;
-  layout.minimumLineSpacing       = kMDCalendarViewLineSpacing;
-  self.layout = layout;
-  
-  self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-  _collectionView.dataSource = self;
-  _collectionView.delegate   = self;
-  _collectionView.backgroundColor = [UIColor whiteColor];
-  _collectionView.allowsMultipleSelection = NO;
-  
-  [_collectionView registerClass:[MDCalendarViewCell class] forCellWithReuseIdentifier:kMDCalendarViewCellIdentifier];
-  [_collectionView registerClass:[MDCalendarHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kMDCalendarHeaderViewIdentifier];
-  [_collectionView registerClass:[MDCalendarFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:kMDCalendarFooterViewIdentifier];
-  
-
-  // Default Configuration
-  self.startDate      = _currentDate;
-  self.selectedDate   = _startDate;
-  self.endDate        = [[_startDate dateByAddingMonths:3] lastDayOfMonth];
-  
-  self.dayFont        = [UIFont systemFontOfSize:17];
-  self.weekdayFont    = [UIFont systemFontOfSize:12];
-  
-  self.cellBackgroundColor    = nil;
-  self.highlightColor         = self.tintColor;
-  self.indicatorColor         = [UIColor lightGrayColor];
-  
-  self.headerBackgroundColor  = nil;
-  self.headerFont             = [UIFont systemFontOfSize:20];
-  
-  self.textColor          = [UIColor darkGrayColor];
-  self.headerTextColor    = _textColor;
-  self.weekdayTextColor   = _textColor;
-  
-  self.canSelectDaysBeforeStartDate = YES;
-  
-  [self addSubview:_collectionView];
+    UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
+    layout.minimumInteritemSpacing  = kMDCalendarViewItemSpacing;
+    layout.minimumLineSpacing       = kMDCalendarViewLineSpacing;
+    self.layout = layout;
+    
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+    _collectionView.dataSource = self;
+    _collectionView.delegate   = self;
+    _collectionView.backgroundColor = [UIColor whiteColor];
+    _collectionView.allowsMultipleSelection = NO;
+    
+    [_collectionView registerClass:[MDCalendarViewCell class] forCellWithReuseIdentifier:kMDCalendarViewCellIdentifier];
+    [_collectionView registerClass:[MDCalendarHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kMDCalendarHeaderViewIdentifier];
+    [_collectionView registerClass:[MDCalendarFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:kMDCalendarFooterViewIdentifier];
+    
+    
+    // Default Configuration
+    self.startDate      = _currentDate;
+    self.selectedDate   = _startDate;
+    self.endDate        = [[_startDate dateByAddingMonths:3] lastDayOfMonth];
+    
+    self.dayFont        = [UIFont systemFontOfSize:17];
+    self.weekdayFont    = [UIFont systemFontOfSize:12];
+    
+    self.cellBackgroundColor    = nil;
+    self.highlightColor         = self.tintColor;
+    self.indicatorColor         = [UIColor lightGrayColor];
+    
+    self.headerBackgroundColor  = nil;
+    self.headerFont             = [UIFont systemFontOfSize:20];
+    
+    self.textColor          = [UIColor darkGrayColor];
+    self.headerTextColor    = _textColor;
+    self.weekdayTextColor   = _textColor;
+    
+    self.canSelectDaysBeforeStartDate = YES;
+    
+    [self addSubview:_collectionView];
 }
 
 - (instancetype)init {
@@ -459,6 +459,14 @@ static CGFloat const kMDCalendarViewSectionSpacing = 10.f;
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
     if (self) {
         [self commonInit];
     }
