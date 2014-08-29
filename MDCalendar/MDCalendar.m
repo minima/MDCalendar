@@ -193,8 +193,10 @@ NSString * MDCalendarDayStringFromDate(NSDate *date) {
     self = [super initWithFrame:frame];
     if (self) {
         NSArray *weekdays = [NSDate weekdayAbbreviations];
+        NSUInteger firstDay = [NSCalendar currentCalendar].firstWeekday - 1;
         NSMutableArray *dayLabels = [NSMutableArray new];
-        for (NSString *day in weekdays) {
+        for (NSUInteger i = firstDay; i < (firstDay + weekdays.count); i++) {
+            NSString *day = weekdays[i % weekdays.count];
             UILabel *dayLabel = [[UILabel alloc] initWithFrame:CGRectZero];
             dayLabel.text = day;
             dayLabel.font = self.font;
@@ -243,7 +245,9 @@ NSString * MDCalendarDayStringFromDate(NSDate *date) {
 #pragma mark - UIAccessibility
 
 - (NSString *)accessibilityLabel {
-    return [NSString stringWithFormat:@"Weekdays, %@ through %@", [NSDate weekdays].firstObject, [NSDate weekdays].lastObject];
+    NSUInteger firstDay = [NSCalendar currentCalendar].firstWeekday - 1;
+    NSArray *weekdays = [NSDate weekdays];
+    return [NSString stringWithFormat:@"Weekdays, %@ through %@", weekdays[firstDay], weekdays[(firstDay - 1) % weekdays.count]];
 }
 
 @end
@@ -521,13 +525,13 @@ static CGFloat const kMDCalendarViewSectionSpacing = 10.f;
 
 - (NSInteger)offsetForSection:(NSInteger)section {
     NSDate *firstDayOfMonth = [self dateForFirstDayOfSection:section];
-    return [firstDayOfMonth weekday] - 1;
+    return (DAYS_IN_WEEK + [firstDayOfMonth weekday] - [NSCalendar currentCalendar].firstWeekday) % DAYS_IN_WEEK;
 }
 
 - (NSInteger)remainderForSection:(NSInteger)section {
     NSDate *lastDayOfMonth = [self dateForLastDayOfSection:section];
     NSInteger weekday = [lastDayOfMonth weekday];
-    return DAYS_IN_WEEK - weekday;
+    return ((DAYS_IN_WEEK + [NSCalendar currentCalendar].firstWeekday) - (weekday + 1)) % DAYS_IN_WEEK;
 }
 
 - (NSDate *)dateForIndexPath:(NSIndexPath *)indexPath {
