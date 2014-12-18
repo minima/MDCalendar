@@ -480,7 +480,10 @@ static CGFloat const kMDCalendarViewSectionSpacing = 10.f;
 - (void)layoutSubviews {
     [super layoutSubviews];
     _collectionView.frame = self.bounds;
-    [self scrollCalendarToDate:_selectedDate animated:NO];
+    [_collectionView.collectionViewLayout invalidateLayout];
+    
+    NSDate *scrollingDate = _selectedDate != nil ? _selectedDate : [NSDate date];
+    [self scrollCalendarToDate:scrollingDate animated:NO];
 }
 
 #pragma mark - Custom Accessors
