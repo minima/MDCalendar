@@ -477,6 +477,15 @@ static CGFloat const kMDCalendarViewSectionSpacing = 10.f;
     _layout.minimumLineSpacing = lineSpacing;
 }
 
+- (void)setSelectedDate:(NSDate *)selectedDate {
+    if (_selectedDate != nil && ![_selectedDate isEqualToDateSansTime:selectedDate]) {
+        NSIndexPath *indexPath = [self indexPathForDate:selectedDate];
+        [self.collectionView selectItemAtIndexPath:indexPath animated:false scrollPosition:UICollectionViewScrollPositionNone];
+    }
+    
+    _selectedDate = selectedDate;
+}
+
 - (CGFloat)lineSpacing {
     return _layout.minimumLineSpacing;
 }
