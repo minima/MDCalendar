@@ -539,6 +539,12 @@ static CGFloat const kMDCalendarViewSectionSpacing = 10.f;
     }
 }
 
+- (void)reloadData
+{
+    [self.collectionView reloadData];
+}
+
+
 #pragma mark - Private Methods & Helper Functions
 
 - (NSInteger)monthForSection:(NSInteger)section {
